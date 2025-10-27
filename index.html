@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATLAB Hierarchical Code Formatting Guide</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+        h3 {
+            color: #2c3e50;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            table-layout: fixed; /* Helps with column distribution */
+            word-wrap: break-word;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px; /* Reduced from 12px */
+            text-align: left;
+            vertical-align: top;
+            word-break: break-word; /* Allows long words to break */
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        /* For screen overflow */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        pre {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+            overflow-x: auto;
+        }
+        code {
+            background: #e9ecef;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .example {
+            background: #e8f4fd;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        /* Print styles for A4 compatibility */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+                margin: 0;
+                font-size: 10pt;
+            }
+            .container {
+                max-width: none;
+                width: 100%;
+                padding: 15mm;
+                box-shadow: none;
+                border-radius: 0;
+                page-break-inside: avoid;
+            }
+            h1 {
+                font-size: 16pt;
+                border-bottom: 2pt solid #3498db;
+            }
+            h2 {
+                font-size: 14pt;
+                border-left: 3pt solid #3498db;
+                padding-left: 10pt;
+            }
+            h3 {
+                font-size: 12pt;
+            }
+            table {
+                font-size: 9pt;
+                page-break-inside: avoid;
+            }
+            th, td {
+                padding: 4pt; /* Further reduced for print */
+                border: 0.5pt solid #000;
+                font-size: 9pt;
+            }
+            th {
+                background-color: #3498db !important;
+                color: white !important;
+            }
+            pre, code {
+                background: #f8f9fa !important;
+                color: #000 !important;
+                font-size: 8pt;
+            }
+            .table-wrapper {
+                overflow: visible;
+                margin: 10pt 0;
+            }
+            @page {
+                size: A4;
+                margin: 15mm;
+            }
+            /* Avoid breaking tables across pages if possible */
+            tr { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MATLAB Hierarchical Code Formatting Guide</h1>
+        
+        <p>This guide explains how to use your custom AutoHotkey (AHK) v2.0 script for consistent, structured MATLAB code formatting. The script creates a hierarchical system to organize code, making it easier to read, maintain, and scale as projects grow. It uses hotkeys (e.g., Alt+Shift+=) and hotstrings (e.g., typing <code>intro</code> and pressing Enter/Space) to insert formatted elements like headers, sections, comments, and templates.</p>
+
+        <h2>Installation and Setup</h2>
+        <ol>
+            <li><strong>Install AutoHotkey v2.0</strong>: Download from <a href="https://www.autohotkey.com/">autohotkey.com</a>. Ensure you're using v2.0 or later.</li>
+            <li><strong>Save the Script</strong>: Copy the provided code into a file named <code>Matlab_new.ahk</code> (or similar) and save it.</li>
+            <li><strong>Run the Script</strong>: Double-click the <code>.ahk</code> file to launch it. It will run in the system tray.</li>
+            <li><strong>Activation</strong>: The script only works in MATLAB windows (detected by executable, class, or title). Open MATLAB and test a hotstring like <code>note</code> to confirm.</li>
+            <li><strong>Customization</strong>: Edit the script in a text editor (e.g., Notepad++). Reload by right-clicking the tray icon &gt; Reload Script.</li>
+            <li><strong>Troubleshooting</strong>:
+                <ul>
+                    <li>If hotstrings don't trigger, ensure "AutoHotkey's keyboard hook" is enabled in settings.</li>
+                    <li>For conflicts, change hotstrings/hotkeys in the script.</li>
+                    <li>Test in MATLAB's Editor (not Command Window).</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2>Usage Overview</h2>
+        <ul>
+            <li><strong>Hotkeys</strong>: Press the key combination (e.g., Alt+Shift+=) to trigger immediately.</li>
+            <li><strong>Hotstrings</strong>: Type the trigger (e.g., <code>sec</code>) and press Enter, Space, or Tab. It auto-replaces and positions the cursor.</li>
+            <li><strong>Contextual Behavior</strong>:
+                <ul>
+                    <li>Some (e.g., subsection) copy the current line's text for dynamic formatting.</li>
+                    <li>Templates insert multi-line blocks with placeholders; edit as needed.</li>
+                </ul>
+            </li>
+            <li><strong>Hierarchy Philosophy</strong>: Start with high-level elements (e.g., intro header) and drill down. Use separators for breaks. Annotations add inline notes without disrupting flow.</li>
+            <li><strong>Best Practices</strong>:
+                <ul>
+                    <li>Use consistently from file start.</li>
+                    <li>Keep sections concise; use templates for complex logic.</li>
+                    <li>Version files by updating the intro's version field.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>Shortcut Reference Table</h2>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Shortcut</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Level 1: Main Topics</strong></td>
+                        <td><code>Alt+Shift+=</code></td>
+                        <td>Hotkey</td>
+                        <td>Creates a centered comment box around the current line's text (min width 50 chars, padded with % borders). Copies line, trims, and wraps.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Level 2: Major Sections</strong></td>
+                        <td><code>sec</code></td>
+                        <td>Hotstring</td>
+                        <td>Inserts a double-percent major section header: <code>%% ==================  ==================</code> with cursor positioned for title.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Level 3: Subsections</strong></td>
+                        <td><code>Alt+=</code></td>
+                        <td>Hotkey</td>
+                        <td>Adds an equals line below the current line (e.g., if line is <code>% My Sub</code>, inserts <code>% =====</code>). Trims leading <code>% </code> and matches length.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Level 3: Subsections</strong></td>
+                        <td><code>tsub</code></td>
+                        <td>Hotstring</td>
+                        <td>Inserts a timestamped subsection: <code>% === [YYYY-MM-DD HH:MM] ===</code> with cursor for title.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Level 4: Minor Topics</strong></td>
+                        <td><code>top</code></td>
+                        <td>Hotstring</td>
+                        <td>Inserts a dashed minor topic: <code>%---  ---</code> with cursor positioned for text.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Level 5: Separators</strong></td>
+                        <td><code>seg</code></td>
+                        <td>Hotstring</td>
+                        <td>Inserts a full % line separator with newlines: <code>\\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\\n\\n</code>.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Level 6: Annotations</strong></td>
+                        <td><code>note</code></td>
+                        <td>Hotstring</td>
+                        <td>Inserts <code>% NOTE: </code> for general notes.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Level 6: Annotations</strong></td>
+                        <td><code>todo</code></td>
+                        <td>Hotstring</td>
+                        <td>Inserts <code>% TODO: </code> for tasks.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Level 6: Annotations</strong></td>
+                        <td><code>warn</code></td>
+                        <td>Hotstring</td>
+                        <td>Inserts <code>% WARNING: </code> for cautions.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Level 6: Annotations</strong></td>
+                        <td><code>imp</code></td>
+                        <td>Hotstring</td>
+                        <td>Inserts <code>% IMPORTANT: </code> for key info.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Level 6: Annotations</strong></td>
+                        <td><code>fix</code></td>
+                        <td>Hotstring</td>
+                        <td>Inserts <code>% FIX: </code> for bugs/repairs.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Level 7: Inline Elements</strong></td>
+                        <td><code>unt</code></td>
+                        <td>Hotstring</td>
+                        <td>Inserts <code>% []</code> for units (cursor inside brackets).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Special Formatting</strong></td>
+                        <td><code>intro</code></td>
+                        <td>Hotstring</td>
+                        <td>Inserts file header with author, date, title, description, version, dependencies, and separator. Cursor on Title line.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Special Formatting</strong></td>
+                        <td><code>mulcom</code></td>
+                        <td>Hotstring</td>
+                        <td>Inserts multiline comment block: <code>% \n \n %</code> with cursor inside.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Special Formatting</strong></td>
+                        <td><code>func</code></td>
+                        <td>Hotstring</td>
+                        <td>Inserts function header: <code>% Function: \n% Inputs: \n% Outputs: \n% Description: </code> with cursor on Function line.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Templates</strong></td>
+                        <td><code>figtemp</code></td>
+                        <td>Hotstring</td>
+                        <td>Inserts figure plotting template with plot, labels, etc. Cursor on xlabel.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Utilities</strong></td>
+                        <td><code>Shift+Backspace</code></td>
+                        <td>Hotkey</td>
+                        <td>Deletes entire current line.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Utilities</strong></td>
+                        <td><code>Ctrl+Backspace</code></td>
+                        <td>Hotkey</td>
+                        <td>Deletes word to the left of cursor.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2>Example: Formatted MATLAB Code Snippet</h2>
+        <p>Here's a sample MATLAB script demonstrating the hierarchy. Assume you start a new file, type <code>intro</code> + Enter, then use shortcuts/hotstrings sequentially. (Indentation and spacing are preserved for readability.)</p>
+        <pre><code>% Author: Dev Rajyaguru
+% Date: 27-10-2025 (Monday)
+
+% Title: Signal Processing Pipeline
+% Description: Processes audio signals with filtering and visualization.
+% Version: 1.0
+
+% Dependencies: (e.g., MATLAB toolboxes used)
+% Signal Processing Toolbox, Audio Toolbox
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ######################################################
+# Main Topic: Signal Acquisition and Preprocessing     #
+# ######################################################
+
+%% ==================  Signal Loading                 ==================
+
+% === [2025-10-27 14:30] Raw Data Import ===
+[data, fs] = audioread('input_signal.wav');  % Load audio file
+% NOTE: Ensure file path is relative to working directory.
+
+% ===== Data Validation =====
+if length(data) &lt; 1000
+    % WARNING: Signal too short - may cause errors in FFT.
+    error('Signal length insufficient');
+end
+% TODO: Add resampling for variable sample rates.
+
+%---  Normalize Amplitude ---
+data = data / max(abs(data));  % Scale to [-1, 1]
+% IMPORTANT: Normalization prevents clipping in downstream steps.
+% FIX: Handle DC offset removal here.
+
+% []  % Unit: Normalized amplitude (dimensionless)
+
+%% ==================  Filtering Section              ==================
+
+% === [2025-10-27 15:00] Low-Pass Filter Application ===
+[b, a] = butter(4, 0.5);  % 4th-order Butterworth
+filtered_data = filtfilt(b, a, data);
+
+% ===== Filter Response Check =====
+figure;
+freqz(b, a);
+% NOTE: Visualize to confirm cutoff frequency.
+
+%---  Edge Effect Mitigation ---
+% TODO: Apply windowing to reduce transients.
+
+% []  % Unit: Hz (frequency response)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ######################################################
+# Main Topic: Analysis and Visualization              #
+# ######################################################
+
+%% ==================  FFT Computation                ==================
+
+%---  Compute Spectrum ---
+N = length(filtered_data);
+f = (0:N-1)*(fs/N);
+spectrum = fft(filtered_data);
+
+% IMPORTANT: Use zero-padding for finer resolution if needed.
+% FIX: Log-scale for dB output.
+
+figtemp  % Expands to figure template
+% (Cursor positioned; edit labels as needed)
+
+% === [2025-10-27 16:00] Power Spectral Density ===
+psd_data = periodogram(filtered_data, [], f, fs);
+
+% ===== Peak Detection =====
+[peaks, locs] = findpeaks(psd_data);
+% WARNING: Peaks may include noise artifacts.
+
+mulcom  % Expands to multiline comment for notes
+% Detailed PSD analysis pending implementation.
+%
+
+func  % Expands to function header template
+% Function: analyze_peaks
+% Inputs: psd_data, threshold
+% Outputs: peak_freqs, amplitudes
+% Description: Identifies dominant frequencies above threshold.
+</code></pre>
+
+        <h3>How This Example Was Built</h3>
+        <ol>
+            <li><code>intro</code> → File header (auto-dates to current day).</li>
+            <li><code>Alt+Shift+=</code> on a line like "Main Topic: Signal Acquisition..." → Boxes the main topic.</li>
+            <li><code>sec</code> → Major section headers.</li>
+            <li><code>tsub</code> → Timestamped subsections.</li>
+            <li><code>Alt+=</code> on a line like <code>% Data Validation</code> → Equals underline.</li>
+            <li><code>top</code> → Minor dashed topics.</li>
+            <li><code>note</code>, <code>todo</code>, <code>warn</code>, <code>imp</code>, <code>fix</code> → Inline annotations.</li>
+            <li><code>unt</code> → Unit placeholder.</li>
+            <li><code>seg</code> → Separator between major sections.</li>
+            <li><code>figtemp</code>, <code>mulcom</code>, <code>func</code> → Templates for quick starts.</li>
+        </ol>
+
+        <p>This structure keeps code scannable: High-level overviews at top, details nested below. For larger files, combine with MATLAB's code folding (e.g., select regions and fold). Feedback welcome for expansions!</p>
+    </div>
+</body>
+</html>
